@@ -35,19 +35,20 @@
       width: 90%;
     }
     .icon { font-size: 40px; margin-bottom: 12px; }
-    h2 { margin: 0 0 8px; font-size: 18px; color: #1a237e; }
-    p  { margin: 0 0 24px; font-size: 14px; color: #666; }
+    h2 { margin: 0 0 6px; font-size: 18px; color: #1a237e; }
+    p  { margin: 0 0 20px; font-size: 13px; color: #888; }
     a.btn {
       display: block;
-      background: #1a237e;
-      color: white;
       text-decoration: none;
-      padding: 14px 24px;
+      padding: 13px 24px;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
+      margin-bottom: 10px;
     }
-    a.btn:active { opacity: 0.8; }
+    a.btn-primary { background: #1a237e; color: white; }
+    a.btn-secondary { background: #f0f0f0; color: #333; }
+    a.btn:active { opacity: 0.75; }
   </style>
 </head>
 <body>
@@ -58,24 +59,28 @@
     var isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
     if (threadId) {
-      var gmailUrl = 'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId;
-
       if (!isIOS) {
         // Desktop: instant auto-redirect
-        window.location.replace(gmailUrl);
+        window.location.replace(
+          'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId
+        );
       } else {
-        // iOS: show tap button — JS auto-redirect strips the fragment on iPhone
+        // iOS: two buttons — Gmail app first, Chrome fallback
+        var gmailAppUrl   = 'googlegmail:///cv?account_id=' + GMAIL_ACCOUNT + '&message_id=' + threadId;
+        var chromeUrl     = 'googlechromes://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/#inbox/' + threadId;
+
         document.write(
           '<div class="card">' +
           '<div class="icon">📧</div>' +
-          '<h2>Open in Gmail</h2>' +
-          '<p>Tap below to open the original email</p>' +
-          '<a class="btn" href="' + gmailUrl + '">Open Email →</a>' +
+          '<h2>Open Email</h2>' +
+          '<p>twinklestar4imari@gmail.com</p>' +
+          '<a class="btn btn-primary" href="' + gmailAppUrl + '">Open in Gmail App</a>' +
+          '<a class="btn btn-secondary" href="' + chromeUrl + '">Open in Chrome</a>' +
           '</div>'
         );
       }
     } else {
-      document.write('<div class="spinner"></div><p style="color:#666">Loading…</p>');
+      document.write('<div class="spinner"></div>');
     }
   </script>
 </body>

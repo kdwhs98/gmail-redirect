@@ -3,33 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Opening Gmail…</title>
+  <title>Open Gmail</title>
   <style>
-    body { font-family: -apple-system, sans-serif; padding: 20px; background: #f5f5f5; }
-    pre { background: #fff; padding: 12px; border-radius: 8px; font-size: 12px; word-break: break-all; white-space: pre-wrap; }
+    body {
+      font-family: -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      max-width: 320px;
+      width: 90%;
+    }
+    .icon { font-size: 40px; margin-bottom: 12px; }
+    h2 { margin: 0 0 8px; font-size: 18px; color: #1a237e; }
+    p { margin: 0 0 24px; font-size: 14px; color: #666; }
+    a.btn {
+      display: block;
+      background: #1a237e;
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    a.btn:active { opacity: 0.8; }
   </style>
 </head>
 <body>
-  <h3>Debug Info</h3>
-  <pre id="out"></pre>
+  <div class="card">
+    <div class="icon">📧</div>
+    <h2>Open in Gmail</h2>
+    <p>Tap below to open the original email</p>
+    <a class="btn" id="gmail-btn" href="#">Open Email →</a>
+  </div>
   <script>
     var parts    = window.location.pathname.split('/').filter(Boolean);
-    var account  = parts[1] || 'MISSING';
-    var threadId = parts[2] || 'MISSING';
-
-    document.getElementById('out').textContent =
-      'pathname: ' + window.location.pathname + '\n' +
-      'parts: ' + JSON.stringify(parts) + '\n' +
-      'account: ' + account + '\n' +
-      'threadId: ' + threadId + '\n' +
-      'search: ' + window.location.search + '\n' +
-      'href: ' + window.location.href;
-
-    // Redirect after 5 seconds so you can read the debug info
-    if (threadId !== 'MISSING') {
-      setTimeout(function () {
-        window.location.replace('https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId);
-      }, 5000);
+    var account  = parts[1] || '2';
+    var threadId = parts[2];
+    if (threadId) {
+      var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
+      document.getElementById('gmail-btn').href = gmailUrl;
     }
   </script>
 </body>

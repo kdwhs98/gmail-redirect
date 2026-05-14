@@ -31,13 +31,12 @@
   </style>
   <script>
     (function () {
-      var params    = new URLSearchParams(window.location.search);
-      var account   = params.get('a') || '2';
-      var threadId  = params.get('t');
+      // Thread ID is in the fragment (#) so LINE can't strip it
+      var threadId = window.location.hash.slice(1);
+      var params   = new URLSearchParams(window.location.search);
+      var account  = params.get('a') || '2';
 
       if (threadId) {
-        // Always use Gmail web desktop mode (?ui=2) — avoids Gmail app prompt
-        // and prevents Gmail mobile PWA redirect from stripping the thread fragment
         var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
         window.location.replace(gmailUrl);
       }
@@ -52,9 +51,9 @@
   </p>
   <script>
     setTimeout(function () {
+      var threadId = window.location.hash.slice(1);
       var params   = new URLSearchParams(window.location.search);
       var account  = params.get('a') || '2';
-      var threadId = params.get('t');
       if (threadId) {
         var link = document.getElementById('fallback-link');
         link.href = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;

@@ -26,40 +26,44 @@
       margin-bottom: 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    p { font-size: 15px; color: #666; }
+    p { font-size: 15px; color: #666; margin: 4px 0; }
     a { color: #1a237e; }
   </style>
-  <script>
-    (function () {
-      var params = new URLSearchParams(window.location.search);
-      var account = params.get('a') || '2';
-      var threadId = params.get('t');
-
-      if (threadId) {
-        // ?ui=2 forces Gmail desktop mode, preventing the mobile redirect that strips the fragment
-        var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
-        window.location.replace(gmailUrl);
-      }
-    })();
-  </script>
 </head>
 <body>
   <div class="spinner"></div>
   <p>Opening Gmail…</p>
-  <p id="fallback" style="display:none">
+  <p id="fallback" style="display:none; margin-top:16px;">
     <a id="fallback-link" href="#">Tap here if not redirected</a>
   </p>
+
   <script>
+    var params   = new URLSearchParams(window.location.search);
+    var account  = params.get('a') || '2';
+    var threadId = params.get('t');
+    var isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    var webUrl   = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
+    var appUrl   = 'googlegmail:///cv?account_id=' + account + '&message_id=' + threadId;
+
+    if (!threadId) {
+      document.querySelector('p').textContent = 'Missing thread ID.';
+    } else if (isIOS) {
+      // Try Gmail app URL scheme first
+      window.location = appUrl;
+      // Fall back to Gmail web after 1.5s if app didn't open
+      setTimeout(function () {
+        window.location.replace(webUrl);
+      }, 1500);
+    } else {
+      window.location.replace(webUrl);
+    }
+
+    // Show manual fallback link after 3s
     setTimeout(function () {
-      var params = new URLSearchParams(window.location.search);
-      var account = params.get('a') || '2';
-      var threadId = params.get('t');
-      if (threadId) {
-        var link = document.getElementById('fallback-link');
-        link.href = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
-        document.getElementById('fallback').style.display = 'block';
-      }
-    }, 2000);
+      var link = document.getElementById('fallback-link');
+      link.href = isIOS ? appUrl : webUrl;
+      document.getElementById('fallback').style.display = 'block';
+    }, 3000);
   </script>
 </body>
 </html>

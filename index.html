@@ -31,10 +31,9 @@
   </style>
   <script>
     (function () {
-      // Thread ID is in the fragment (#) so LINE can't strip it
-      var threadId = window.location.hash.slice(1);
       var params   = new URLSearchParams(window.location.search);
       var account  = params.get('a') || '2';
+      var threadId = params.get('thread');
 
       if (threadId) {
         var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
@@ -51,9 +50,9 @@
   </p>
   <script>
     setTimeout(function () {
-      var threadId = window.location.hash.slice(1);
       var params   = new URLSearchParams(window.location.search);
       var account  = params.get('a') || '2';
+      var threadId = params.get('thread');
       if (threadId) {
         var link = document.getElementById('fallback-link');
         link.href = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;

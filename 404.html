@@ -33,7 +33,6 @@
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
       max-width: 320px;
       width: 90%;
-      display: none;
     }
     .icon { font-size: 40px; margin-bottom: 12px; }
     h2 { margin: 0 0 6px; font-size: 18px; color: #1a237e; }
@@ -53,14 +52,6 @@
   </style>
 </head>
 <body>
-  <div class="spinner" id="spinner"></div>
-  <div class="card" id="card">
-    <div class="icon">📧</div>
-    <h2>Open Email</h2>
-    <p>twinklestar4imari@gmail.com</p>
-    <a class="btn btn-primary" id="gmail-btn" href="#">Open in Gmail App</a>
-    <a class="btn btn-secondary" id="web-btn" href="#">Open in Browser</a>
-  </div>
   <script>
     var GMAIL_ACCOUNT = 'twinklestar4imari@gmail.com';
     var parts    = window.location.pathname.split('/').filter(Boolean);
@@ -68,26 +59,28 @@
     var isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
     if (threadId) {
-      var gmailWebUrl = 'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId;
-      var gmailAppUrl = 'googlegmail:///cv?account_id=' + GMAIL_ACCOUNT + '&message_id=' + threadId;
-
       if (!isIOS) {
-        // Desktop: instant redirect
-        window.location.replace(gmailWebUrl);
+        // Desktop: instant auto-redirect
+        window.location.replace(
+          'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId
+        );
       } else {
-        // Set fallback button hrefs
-        document.getElementById('gmail-btn').href = gmailAppUrl;
-        document.getElementById('web-btn').href   = gmailWebUrl;
+        // iOS: two buttons — Gmail app first, web fallback
+        var gmailAppUrl = 'googlegmail:///cv?account_id=' + GMAIL_ACCOUNT + '&message_id=' + threadId;
+        var gmailWebUrl = 'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId;
 
-        // Auto-attempt Gmail app launch
-        window.location.href = gmailAppUrl;
-
-        // After 1.5s if still here, show fallback card
-        setTimeout(function () {
-          document.getElementById('spinner').style.display = 'none';
-          document.getElementById('card').style.display    = 'block';
-        }, 1500);
+        document.write(
+          '<div class="card">' +
+          '<div class="icon">📧</div>' +
+          '<h2>Open Email</h2>' +
+          '<p>twinklestar4imari@gmail.com</p>' +
+          '<a class="btn btn-primary" href="' + gmailAppUrl + '">Open in Gmail App</a>' +
+          '<a class="btn btn-secondary" href="' + gmailWebUrl + '">Open in Browser</a>' +
+          '</div>'
+        );
       }
+    } else {
+      document.write('<div class="spinner"></div>');
     }
   </script>
 </body>

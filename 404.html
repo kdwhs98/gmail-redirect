@@ -53,6 +53,7 @@
 </head>
 <body>
   <script>
+    var GMAIL_INDEX   = '2';
     var GMAIL_ACCOUNT = 'twinklestar4imari@gmail.com';
     var parts    = window.location.pathname.split('/').filter(Boolean);
     var threadId = parts[1];
@@ -60,14 +61,14 @@
 
     if (threadId) {
       if (!isIOS) {
-        // Desktop: instant auto-redirect
+        // Desktop: use account index (u/2) — email address causes Gmail 404
         window.location.replace(
-          'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId
+          'https://mail.google.com/mail/u/' + GMAIL_INDEX + '/?ui=2#inbox/' + threadId
         );
       } else {
-        // iOS: two buttons — Gmail app first, web fallback
+        // iOS: Gmail app URL with email address, web fallback
         var gmailAppUrl = 'googlegmail:///cv?account_id=' + GMAIL_ACCOUNT + '&message_id=' + threadId;
-        var gmailWebUrl = 'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId;
+        var gmailWebUrl = 'https://mail.google.com/mail/u/' + GMAIL_INDEX + '/?ui=2#inbox/' + threadId;
 
         document.write(
           '<div class="card">' +

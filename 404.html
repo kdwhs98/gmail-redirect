@@ -15,6 +15,16 @@
       margin: 0;
       background: #f5f5f5;
     }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #ddd;
+      border-top-color: #1a237e;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .card {
       background: white;
       border-radius: 16px;
@@ -26,7 +36,7 @@
     }
     .icon { font-size: 40px; margin-bottom: 12px; }
     h2 { margin: 0 0 8px; font-size: 18px; color: #1a237e; }
-    p { margin: 0 0 24px; font-size: 14px; color: #666; }
+    p  { margin: 0 0 24px; font-size: 14px; color: #666; }
     a.btn {
       display: block;
       background: #1a237e;
@@ -41,19 +51,31 @@
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">📧</div>
-    <h2>Open in Gmail</h2>
-    <p>Tap below to open the original email</p>
-    <a class="btn" id="gmail-btn" href="#">Open Email →</a>
-  </div>
   <script>
+    var GMAIL_ACCOUNT = 'twinklestar4imari@gmail.com';
     var parts    = window.location.pathname.split('/').filter(Boolean);
-    var account  = parts[1] || '2';
-    var threadId = parts[2];
+    var threadId = parts[1];
+    var isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
     if (threadId) {
-      var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
-      document.getElementById('gmail-btn').href = gmailUrl;
+      var gmailUrl = 'https://mail.google.com/mail/u/' + GMAIL_ACCOUNT + '/?ui=2#inbox/' + threadId;
+
+      if (!isIOS) {
+        // Desktop: instant auto-redirect
+        window.location.replace(gmailUrl);
+      } else {
+        // iOS: show tap button — JS auto-redirect strips the fragment on iPhone
+        document.write(
+          '<div class="card">' +
+          '<div class="icon">📧</div>' +
+          '<h2>Open in Gmail</h2>' +
+          '<p>Tap below to open the original email</p>' +
+          '<a class="btn" href="' + gmailUrl + '">Open Email →</a>' +
+          '</div>'
+        );
+      }
+    } else {
+      document.write('<div class="spinner"></div><p style="color:#666">Loading…</p>');
     }
   </script>
 </body>

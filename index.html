@@ -36,7 +36,8 @@
       var threadId = params.get('t');
 
       if (threadId) {
-        var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/#inbox/' + threadId;
+        // ?ui=2 forces Gmail desktop mode, preventing the mobile redirect that strips the fragment
+        var gmailUrl = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
         window.location.replace(gmailUrl);
       }
     })();
@@ -49,14 +50,13 @@
     <a id="fallback-link" href="#">Tap here if not redirected</a>
   </p>
   <script>
-    // Show fallback link after 2 seconds in case redirect doesn't fire
     setTimeout(function () {
       var params = new URLSearchParams(window.location.search);
       var account = params.get('a') || '2';
       var threadId = params.get('t');
       if (threadId) {
         var link = document.getElementById('fallback-link');
-        link.href = 'https://mail.google.com/mail/u/' + account + '/#inbox/' + threadId;
+        link.href = 'https://mail.google.com/mail/u/' + account + '/?ui=2#inbox/' + threadId;
         document.getElementById('fallback').style.display = 'block';
       }
     }, 2000);
